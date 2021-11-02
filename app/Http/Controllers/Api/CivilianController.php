@@ -27,8 +27,7 @@ class CivilianController extends Controller
             'cellphone' => 'required|string',
             'email' => 'required|email',
             'password' => 'required|string|confirmed',
-            'token_name' => 'string',
-            'type' => 'string'
+            'token_name' => 'string'
         ]);
         $email = User::where('email', $data['email'])->first();
         if ($email) {
@@ -58,7 +57,8 @@ class CivilianController extends Controller
                 $user->markEmailAsVerified();
                 Civilian::create(['user_id' => $user->id]);
                 $token = $user->createToken($data['token_name'])->plainTextToken;
-                return response(['user' => $user, 'token' => $token], 201);
+                return response(['message' => 'Registro finalizado correctamente',
+                    'user' => $user, 'token' => $token], 201);
             });
         } catch (Exception $e) {
             return response(['message' => 'Error registro no completado'],
@@ -111,7 +111,7 @@ class CivilianController extends Controller
             $user = $request->user();
             $user->currentAccessToken()->delete();
             return response(['message' => 'Sesion cerrada'], 200);
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return response(['message' => 'Error desconocido'], 406);
         }
     }
