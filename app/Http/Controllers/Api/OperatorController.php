@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 //use App\Models\NotificationDevice;
-use App\Models\Civilian;
+use App\Models\Operator;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -13,16 +13,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class CivilianController extends Controller
+class OperatorController extends Controller
 {
     public function register(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string',
             'last_name' => 'required|string',
-            'ci' => 'required|string',
-            'home_address' => 'required|string',
-            'birthday' => 'required|string',
+            'ci' => 'string',
+            'home_address' => 'string',
+            'birthday' => 'string',
             'sex' => 'required|string',
             'cellphone' => 'required|string',
             'email' => 'required|email',
@@ -44,18 +44,18 @@ class CivilianController extends Controller
                 $user = User::create([
                     'name' => $data['name'],
                     'last_name' => $data['last_name'],
-                    'ci' => $data['ci'],
-                    'home_address' => $data['home_address'],
-                    'birthday' => $data['birthday'],
+                    'ci' => array_key_exists('ci', $data) ? $data['ci'] : null,
+                    'home_address' => array_key_exists('home_address', $data) ? $data['home_address'] : null,
+                    'birthday' => array_key_exists('birthday', $data) ? $data['birthday'] : null,
                     'sex' => $data['sex'],
                     'cellphone' => $data['cellphone'],
                     'email' => $data['email'],
                     'password' => Hash::make($data['password']),
                     'token_name' => $data['token_name'],
-                    'type' => 'civilian'
+                    'type' => 'operator'
                 ]);
                 $user->markEmailAsVerified();
-                Civilian::create(['user_id' => $user->id]);
+                Operator::create(['user_id' => $user->id]);
                 $token = $user->createToken($data['token_name'])->plainTextToken;
                 return response(['message' => 'Registro finalizado correctamente',
                     'user' => $user, 'token' => $token], 201);
@@ -91,8 +91,8 @@ class CivilianController extends Controller
             ], 403);
         }
         $token = $user->createToken($data['token_name'])->plainTextToken;
-        $user = User::join('civilians', 'civilians.user_id', 'users.id')
-            ->select('users.*', 'civilians.id as id_civilian')
+        $user = User::join('operators', 'operators.user_id', 'users.id')
+            ->select('users.*', 'operators.id as id_operator')
             ->where('users.id', $user->id)
             ->first();
         return response([
@@ -116,11 +116,11 @@ class CivilianController extends Controller
         }
     }
 
-    public function civilian(Request $request)
+    public function operator(Request $request)
     {
         try {
-            return User::join('civilians', 'civilians.user_id', 'users.id')
-                ->select('users.*', 'civilians.id as id_civilian')
+            return User::join('operators', 'operators.user_id', 'users.id')
+                ->select('users.*', 'operators.id as id_operator')
                 ->where('users.id', $request->user()->id)
                 ->first();
         } catch (Exception $e) {

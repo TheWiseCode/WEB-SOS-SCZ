@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class CivilianController extends Controller
+class HelperController extends Controller
 {
     public function register(Request $request)
     {
@@ -92,7 +92,7 @@ class CivilianController extends Controller
         }
         $token = $user->createToken($data['token_name'])->plainTextToken;
         $user = User::join('civilians', 'civilians.user_id', 'users.id')
-            ->select('users.*', 'civilians.id as id_civilian')
+            ->select('users.*', 'civilians.id')
             ->where('users.id', $user->id)
             ->first();
         return response([
@@ -116,7 +116,7 @@ class CivilianController extends Controller
         }
     }
 
-    public function civilian(Request $request)
+    public function helper(Request $request)
     {
         try {
             return User::join('civilians', 'civilians.user_id', 'users.id')
