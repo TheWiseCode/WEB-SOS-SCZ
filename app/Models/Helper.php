@@ -10,10 +10,14 @@ class Helper extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id'
+        'type','rank','emergency_unit', 'in_turn', 'user_id'
     ];
 
     public function user(){
         return $this->hasOne(User::class);
+    }
+
+    public function workdays(){
+        return $this->hasMany(Workday::class);
     }
 }

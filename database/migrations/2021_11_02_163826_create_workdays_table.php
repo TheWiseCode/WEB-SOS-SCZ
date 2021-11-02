@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHelpersTable extends Migration
+class CreateWorkdaysTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateHelpersTable extends Migration
      */
     public function up()
     {
-        Schema::create('helpers', function (Blueprint $table) {
+        Schema::create('workdays', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
-            $table->string('rank')->nullable();
-            $table->string('emergency_unit');
-            $table->boolean('in_turn')->default('false');
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->string('day_turn');
+            $table->time('start_turn');
+            $table->time('end_turn');
+            $table->foreignId('helper_id')->references('id')->on('helpers');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateHelpersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('helpers');
+        Schema::dropIfExists('workdays');
     }
 }
