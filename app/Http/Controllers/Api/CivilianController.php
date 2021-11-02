@@ -120,7 +120,7 @@ class CivilianController extends Controller
     {
         try {
             return User::join('civilians', 'civilians.user_id', 'users.id')
-                ->select('users.*', 'civilians.id')
+                ->select('users.*', 'civilians.id as id_civilian')
                 ->where('users.id', $request->user()->id)
                 ->first();
         } catch (Exception $e) {
