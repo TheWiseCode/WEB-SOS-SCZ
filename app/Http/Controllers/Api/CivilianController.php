@@ -92,7 +92,7 @@ class CivilianController extends Controller
         }
         $token = $user->createToken($data['token_name'])->plainTextToken;
         $user = User::join('civilians', 'civilians.user_id', 'users.id')
-            ->select('users.*', 'civians.id')
+            ->select('users.*', 'civilians.id')
             ->where('users.id', $user->id)
             ->first();
         return response([
