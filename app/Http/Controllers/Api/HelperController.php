@@ -147,7 +147,7 @@ class HelperController extends Controller
                 )
                 ->where('users.id', $request->user()->id)->first();
             $workdays = Workday::where('helper_id', $user->id_helper)->get()->toArray();
-            $data = [
+            return [
                 'id' => $user->id,
                 'name' => $user->name,
                 'last_name' => $user->last_name,
@@ -164,7 +164,6 @@ class HelperController extends Controller
                 'in_turn' => $user->in_turn,
                 'workdays' => $workdays
             ];
-            return $data;
         } catch (Exception $e) {
             return response(['message' => 'Error desconocido'], 406);
         }
