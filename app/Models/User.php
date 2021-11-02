@@ -19,8 +19,15 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'last_name',
+        'ci',
+        'home_address',
+        'cellphone',
+        'birthday',
+        'sex',
         'email',
         'password',
+        'type'
     ];
 
     /**
@@ -41,4 +48,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function notificationDevices(){
+        return $this->hasMany(NotificationDevice::class);
+    }
 }

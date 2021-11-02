@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CivilianController;
 use App\Http\Controllers\Api\SessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/register/user', [SessionController::class, 'register']);
-Route::post('/login', [SessionController::class, 'login']);
+Route::post('/register/civilian', [CivilianController::class, 'register']);
+Route::post('/login/civilian', [CivilianController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/user', [SessionController::class, 'user']);
-    Route::delete('/logout', [SessionController::class, 'logout']);
+    Route::get('/civilian', [CivilianController::class, 'civilian']);
+    Route::delete('/logout/civilian', [CivilianController::class, 'logout']);
 });
