@@ -51,11 +51,11 @@ class CivilianController extends Controller
                     'sex' => $data['sex'],
                     'cellphone' => $data['cellphone'],
                     'email' => $data['email'],
-                    'email_verified_at' => Carbon::now(),
                     'password' => Hash::make($data['password']),
                     'token_name' => $data['token_name'],
                     'type' => 'civilian'
                 ]);
+                $user->markEmailAsVerified();
                 Civilian::create(['user_id' => $user->id]);
                 $token = $user->createToken($data['token_name'])->plainTextToken;
                 return response(['user' => $user, 'token' => $token], 201);
