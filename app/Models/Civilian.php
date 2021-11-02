@@ -13,7 +13,8 @@ class Civilian extends Model
         'user_id'
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->hasOne(User::class);
     }
 }
