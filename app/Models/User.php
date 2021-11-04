@@ -52,4 +52,13 @@ class User extends Authenticatable
     public function notificationDevices(){
         return $this->hasMany(NotificationDevice::class);
     }
+
+    public function Citizen(){
+        return $this->hasOne(Cityzen::class,'user_id');
+    }
+
+    public function Officer(){
+        return $this->hasOne(Officer::class,'user_id');
+    }
+
 }
