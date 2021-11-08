@@ -46,7 +46,7 @@ class EmergencyController extends Controller
      */
     public function show($id )
     {
-        $emergency = Emergency::find($id);
+        $emergency = Emergency::with('Citizen','Type_institution')->find($id);
         if(!$emergency){
             abort(404,'Object not found');
         }

@@ -52,8 +52,8 @@ Route::apiResource('/citizens',\App\Http\Controllers\Api\CitizenController::clas
 Route::apiResource('/institutions',\App\Http\Controllers\Api\InstitutionController::class);
 Route::get('institutions-positions',[\App\Http\Controllers\Api\InstitutionController::class,'InstPositions'])->name('getPositionsAtInstitutes');
 Route::apiResource('/positions',\App\Http\Controllers\Api\PositionsController::class);
-Route::post('/officer-workshifts/{id}',[\App\Http\Controllers\Api\OfficerController::class,'getWorkShifts'])->name('getWorkShifts');
 Route::apiResource('/officer', \App\Http\Controllers\Api\OfficerController::class);
+Route::post('/officer-workshifts/{id}',[\App\Http\Controllers\Api\OfficerController::class,'getWorkShifts'])->name('getWorkShifts');
 Route::apiResource('/vehicles',\App\Http\Controllers\Api\VehicleController::class);
 Route::post('/work-shifts-coordinates/{id}',[\App\Http\Controllers\Api\WorkShiftController::class,'getLocations']);
 Route::apiResource('work-shifts',\App\Http\Controllers\Api\WorkShiftController::class);

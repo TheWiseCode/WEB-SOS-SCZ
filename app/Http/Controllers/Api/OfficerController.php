@@ -42,7 +42,7 @@ class OfficerController extends Controller
      */
     public function store(StoreOfficerRequest $request)
     {
-        $user = User::find($request->user_id);
+        $user = \App\Models\User::find($request->user_id);
         $position = Position::find($request->position_id);
         $institution =  institution::find($request->institution_id);
         if( !$user || !$position || !$institution){
@@ -73,9 +73,9 @@ class OfficerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Officer $officer)
+    public function update(StoreOfficerRequest $request,Officer $officer)
     {
-        $user = User::find($request->user_id);
+        $user = \App\Models\User::find($request->user_id);
         $position = Position::find($request->position_id);
         $institution =  institution::find($request->institution_id);
         if( !$user || !$position || !$institution){

@@ -43,7 +43,7 @@ class PositionsController extends Controller
      */
     public function show($id)
     {
-        $position = Position::find($id);
+        $position = Position::with('Institutions')->find($id);
         if(!$position){
             abort(404,'Object not found');
         }

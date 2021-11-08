@@ -43,7 +43,7 @@ class InstitutionController extends Controller
      */
     public function show($id)
     {
-        $inst = institution::find($id);
+        $inst = institution::with('Type_institution')->find($id);
         if(!$inst){
             abort(404,'Object not found');
         }

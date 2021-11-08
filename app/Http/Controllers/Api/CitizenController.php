@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCitizenRequest;
 use App\Models\Cityzen;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
 
 class CitizenController extends Controller
@@ -38,8 +39,8 @@ class CitizenController extends Controller
      */
     public function show($id)
     {
-        //TODO: MAKE THIS METHOD RETURN THE OBJECT WITH RELATIONS
-        $citizen = Cityzen::find($id);
+
+        $citizen = Cityzen::with('User')->find($id);
         if(!$citizen){
             abort(404,'Object not found');
         }
@@ -56,6 +57,10 @@ class CitizenController extends Controller
     public function update(StoreCitizenRequest $request,Cityzen $cityzen)
     {
         //TODO: I think we dont really need this method
+        $user = User::find($request->user_id);
+        if(!$user){
+           abort(404,'Object not found');
+        }
         $cityzen->update($request->validated());
         return $cityzen;
     }

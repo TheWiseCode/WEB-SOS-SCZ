@@ -43,7 +43,7 @@ class WorkShiftLocationController extends Controller
      */
     public function show($id)
     {
-        $locations = WorkShift_location::find($id);
+        $locations = WorkShift_location::with('Work_shift')->find($id);
         if(!$locations){
             abort(404,'Object not found');
         }
