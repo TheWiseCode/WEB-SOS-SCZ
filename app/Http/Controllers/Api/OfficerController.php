@@ -25,12 +25,11 @@ class OfficerController extends Controller
     /**Display all the officer's work shifts he has been on.
      * @param $id
      */
-    //TODO: TEST WHEN WORK SHIFTS TABLE IS DONE
     public function getWorkShifts($id){
         $officer = Officer::with('Work_shift')->find($id);
-        if(!$officer){
+        /*if(!$officer){
             abort(404,' Object not found ');
-        }
+        }*/
         return $officer;
     }
 

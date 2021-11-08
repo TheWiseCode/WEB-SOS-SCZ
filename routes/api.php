@@ -53,8 +53,8 @@ Route::apiResource('/institutions',\App\Http\Controllers\Api\InstitutionControll
 Route::get('institutions-positions',[\App\Http\Controllers\Api\InstitutionController::class,'InstPositions'])->name('getPositionsAtInstitutes');
 Route::apiResource('/positions',\App\Http\Controllers\Api\PositionsController::class);
 Route::apiResource('/officer', \App\Http\Controllers\Api\OfficerController::class);
-Route::post('/officer-workshifts/{id}',[\App\Http\Controllers\Api\OfficerController::class,'getWorkShifts'])->name('getWorkShifts');
+Route::get('/officer-workshifts/{id}',[\App\Http\Controllers\Api\OfficerController::class,'getWorkShifts'])->name('getWorkShifts');
 Route::apiResource('/vehicles',\App\Http\Controllers\Api\VehicleController::class);
 Route::post('/work-shifts-coordinates/{id}',[\App\Http\Controllers\Api\WorkShiftController::class,'getLocations']);
-Route::apiResource('work-shifts',\App\Http\Controllers\Api\WorkShiftController::class);
+Route::apiResource('/work-shifts',\App\Http\Controllers\Api\WorkShiftController::class);
 Route::apiResource('/work-shift-locations', \App\Http\Controllers\Api\WorkShiftLocationController::class);

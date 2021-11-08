@@ -14,7 +14,7 @@ class Work_shift extends Model
         'vehicle_id',
         'schedule_id',
         'shift_starts',
-        'shift_ends'
+        'shift_end',
     ];
 
     public function Vehicle(){

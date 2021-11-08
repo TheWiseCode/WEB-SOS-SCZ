@@ -28,7 +28,7 @@ class StoreWorkShiftRequest extends FormRequest
             'schedule_id'=>'required',
             'vehicle_id'=>'required',
             'shift_starts'=>'required',
-            'shift_ends'=>'required',
+            'shift_end'=>'required',
         ];
     }
 }
