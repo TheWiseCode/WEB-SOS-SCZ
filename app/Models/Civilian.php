@@ -17,4 +17,9 @@ class Civilian extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function emergencies()
+    {
+        return $this->hasMany(Emergency::class);
+    }
 }

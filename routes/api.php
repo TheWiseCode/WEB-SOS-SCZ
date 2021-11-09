@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\CivilianController;
 use App\Http\Controllers\Api\HelperController;
 use App\Http\Controllers\Api\OperatorController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,28 +17,34 @@ use Illuminate\Support\Facades\Route;
 */
 
 //TODO: RUTAS API PARA LA APP MOVIL DE PARTE DE LOS CIVILES: SOS SCZ
-Route::post('/register/civilian', [CivilianController::class, 'register']);
-Route::post('/login/civilian', [CivilianController::class, 'login']);
+Route::prefix('civilian')->group(function () {
+    Route::post('/register', [CivilianController::class, 'register']);
+    Route::post('/login', [CivilianController::class, 'login']);
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/civilian', [CivilianController::class, 'civilian']);
-    Route::delete('/logout/civilian', [CivilianController::class, 'logout']);
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::get('', [CivilianController::class, 'civilian']);
+        Route::delete('/logout', [CivilianController::class, 'logout']);
+    });
 });
 
 //TODO: RUTAS API PARA LA APP MOVIL DE PARTE DE LOS OPERADORES: CCO SOS SCZ
-Route::post('/register/operator', [OperatorController::class, 'register']);
-Route::post('/login/operator', [OperatorController::class, 'login']);
+Route::prefix('operator')->group(function () {
+    Route::post('/register', [OperatorController::class, 'register']);
+    Route::post('/login', [OperatorController::class, 'login']);
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/operator', [OperatorController::class, 'operator']);
-    Route::delete('/logout/operator', [OperatorController::class, 'logout']);
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::get('', [OperatorController::class, 'operator']);
+        Route::delete('/logout', [OperatorController::class, 'logout']);
+    });
 });
 
 //TODO: RUTAS API PARA LA APP MOVIL DE PARTE DE LOS AUXILIADORES: APOYO SOS SCZ
-Route::post('/register/helper', [HelperController::class, 'register']);
-Route::post('/login/helper', [HelperController::class, 'login']);
+Route::prefix('helper')->group(function () {
+    Route::post('/register', [HelperController::class, 'register']);
+    Route::post('/login', [HelperController::class, 'login']);
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/helper', [HelperController::class, 'helper']);
-    Route::delete('/logout/helper', [HelperController::class, 'logout']);
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::get('', [HelperController::class, 'helper']);
+        Route::delete('/logout', [HelperController::class, 'logout']);
+    });
 });

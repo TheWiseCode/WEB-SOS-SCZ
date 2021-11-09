@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 //use App\Models\NotificationDevice;
 use App\Models\Helper;
 use App\Models\User;
-use App\Models\Workday;
+use App\Models\WorkShift;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -69,7 +69,7 @@ class HelperController extends Controller
                     'emergency_unit' => $data['emergency_unit']
                 ]);
                 for($i = 0; $i < count($data['workdays']); $i++){
-                    Workday::create([
+                    WorkShift::create([
                         'day_turn' => $data['workdays'][$i],
                         'start_turn' => $data['start_turn'],
                         'end_turn' => $data['end_turn'],
@@ -147,7 +147,7 @@ class HelperController extends Controller
                     'helpers.start_turn', 'helpers.end_turn'
                 )
                 ->where('users.id', $request->user()->id)->first();
-            $workdays = Workday::where('helper_id', $user->id_helper)->get()->toArray();
+            $workdays = WorkShift::where('helper_id', $user->id_helper)->get()->toArray();
             return [
                 'id' => $user->id,
                 'name' => $user->name,

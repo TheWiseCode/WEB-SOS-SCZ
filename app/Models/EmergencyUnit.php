@@ -5,21 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Emergency extends Model
+class EmergencyUnit extends Model
 {
     use HasFactory;
 
-    protected $table = 'emergencies';
+    protected $table = 'emergency_units';
     protected $fillable = [
         'type',
+        'vehicle_license',
         'description',
-        'longitude',
-        'latitude',
-        'civilian_id',
+        'helper_id'
     ];
 
-    public function civilian()
+    public function helper()
     {
-        return $this->belongsTo(Civilian::class);
+        return $this->hasOne(Helper::class);
     }
 }

@@ -17,8 +17,9 @@ class CreateHelpersTable extends Migration
             $table->id();
             $table->string('type');
             $table->string('rank')->nullable();
-            $table->string('emergency_unit');
             $table->boolean('in_turn')->default('false');
+            $table->double('longitude')->nullable();
+            $table->double('latitude')->nullable();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->timestamps();
         });
