@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
-//use App\Models\NotificationDevice;
 use App\Models\Civilian;
 use App\Models\NotificationDevice;
 use App\Models\User;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -94,7 +92,7 @@ class CivilianController extends Controller
         NotificationDevice::create([
             'name_device' => $data['token_name'],
             'token' => $data['token_firebase'],
-            'id_user' => $user->id
+            'user_id' => $user->id
         ]);
         $token = $user->createToken($data['token_name'])->plainTextToken;
         $user = User::join('civilians', 'civilians.user_id', 'users.id')
