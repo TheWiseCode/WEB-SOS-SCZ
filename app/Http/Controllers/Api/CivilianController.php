@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 //use App\Models\NotificationDevice;
 use App\Models\Civilian;
+use App\Models\NotificationDevice;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -72,7 +73,7 @@ class CivilianController extends Controller
             'email' => 'required|email',
             'password' => 'required|string',
             'token_name' => 'required|string',
-            //'token_firebase' => 'required|string'
+            'token_firebase' => 'required|string'
         ]);
         $user = User::where('email', $data['email'])->first();
         if (!$user) {
@@ -90,6 +91,11 @@ class CivilianController extends Controller
                 'message' => 'Verifique su correo para poder ingresar',
             ], 403);
         }
+        NotificationDevice::create([
+            'name_device' => $data['token_name'],
+            'token' => $data['token_firebase'],
+            'id_user' => $user->id
+        ]);
         $token = $user->createToken($data['token_name'])->plainTextToken;
         $user = User::join('civilians', 'civilians.user_id', 'users.id')
             ->select('users.*', 'civilians.id as id_civilian')
@@ -103,10 +109,10 @@ class CivilianController extends Controller
 
     public function logout(Request $request)
     {
-        /*$data = $request->validate([
+        $data = $request->validate([
             'token_firebase' => 'required'
-        ]);*/
-        //NotificationDevice::where('token', $data['token_firebase'])->delete();
+        ]);
+        NotificationDevice::where('token', $data['token_firebase'])->delete();
         try {
             $user = $request->user();
             $user->currentAccessToken()->delete();

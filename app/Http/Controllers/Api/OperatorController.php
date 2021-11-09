@@ -20,9 +20,9 @@ class OperatorController extends Controller
         $data = $request->validate([
             'name' => 'required|string',
             'last_name' => 'required|string',
-            'ci' => 'string',
-            'home_address' => 'string',
-            'birthday' => 'string',
+            'ci' => 'sometimes|string',
+            'home_address' => 'sometimes|string',
+            'birthday' => 'sometimes|string',
             'sex' => 'required|string',
             'cellphone' => 'required|string',
             'email' => 'required|email',
