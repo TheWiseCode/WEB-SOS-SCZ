@@ -64,7 +64,7 @@ class HelperController extends Controller
                     'user_id' => $user->id,
                     'type' => $data['type_helper'],
                     'rank' => array_key_exists('rank', $data) ? $data['rank'] : null,
-                    'emergency_unit' => $data['emergency_unit']
+                    //'emergency_unit' => $data['emergency_unit']
                 ]);
                 for($i = 0; $i < count($data['workdays']); $i++){
                     WorkShift::create([
