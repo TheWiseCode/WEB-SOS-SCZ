@@ -10,7 +10,7 @@ class Helper extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type', 'rank', 'in_turn', 'longitude', 'latitude', 'user_id'
+        'type', 'rank', 'in_turn', 'longitude', 'latitude', 'user_id', 'emergency_unit'
     ];
 
     public function user()

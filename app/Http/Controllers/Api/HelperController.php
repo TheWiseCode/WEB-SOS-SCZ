@@ -79,7 +79,7 @@ class HelperController extends Controller
                     'user' => $user, 'token' => $token], 201);
             });
         } catch (Exception $e) {
-            return response(['message' => 'Error registro no completado' . $e->getMessage()],
+            return response(['message' => 'Error registro no completado ' . $e->getMessage()],
                 406);
         }
     }
