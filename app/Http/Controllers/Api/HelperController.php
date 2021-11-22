@@ -29,8 +29,10 @@ class HelperController extends Controller
             'type_helper' => 'required|string',
             'rank' => 'sometimes|string',
             'emergency_unit' => 'required|string',
-            'start_turn' => 'required|date_format:H:i',
-            'end_turn' => 'required|date_format:H:i',
+            'start_turn' => 'required|string',
+            //'start_turn' => 'required|date_format:H:i',
+            'end_turn' => 'required|string',
+            //'end_turn' => 'required|date_format:H:i',
             'workdays' => 'required|array|min:1',
             'token_name' => 'required|string'
         ]);
