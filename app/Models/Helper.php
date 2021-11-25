@@ -10,14 +10,21 @@ class Helper extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type','rank','emergency_unit', 'in_turn', 'user_id'
+        'type', 'rank', 'in_turn', 'longitude', 'latitude', 'user_id'
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->hasOne(User::class);
     }
 
-    public function workdays(){
-        return $this->hasMany(Workday::class);
+    public function workShifts()
+    {
+        return $this->hasMany(WorkShift::class);
+    }
+
+    public function emergencyUnit()
+    {
+        return $this->belongsTo(EmergencyUnit::class);
     }
 }

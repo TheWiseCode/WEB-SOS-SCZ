@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
-//use App\Models\NotificationDevice;
+use App\Models\NotificationDevice;
 use App\Models\Operator;
 use App\Models\User;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,9 +19,9 @@ class OperatorController extends Controller
         $data = $request->validate([
             'name' => 'required|string',
             'last_name' => 'required|string',
-            'ci' => 'string',
-            'home_address' => 'string',
-            'birthday' => 'string',
+            'ci' => 'sometimes|string',
+            'home_address' => 'sometimes|string',
+            'birthday' => 'sometimes|string',
             'sex' => 'required|string',
             'cellphone' => 'required|string',
             'email' => 'required|email',
@@ -72,7 +71,7 @@ class OperatorController extends Controller
             'email' => 'required|email',
             'password' => 'required|string',
             'token_name' => 'required|string',
-            //'token_firebase' => 'required|string'
+            'token_firebase' => 'required|string'
         ]);
         $user = User::where('email', $data['email'])->first();
         if (!$user) {
@@ -90,6 +89,11 @@ class OperatorController extends Controller
                 'message' => 'Verifique su correo para poder ingresar',
             ], 403);
         }
+        NotificationDevice::create([
+            'name_device' => $data['token_name'],
+            'token' => $data['token_firebase'],
+            'user_id' => $user->id
+        ]);
         $token = $user->createToken($data['token_name'])->plainTextToken;
         $user = User::join('operators', 'operators.user_id', 'users.id')
             ->select('users.*', 'operators.id as id_operator')
@@ -103,10 +107,10 @@ class OperatorController extends Controller
 
     public function logout(Request $request)
     {
-        /*$data = $request->validate([
+        $data = $request->validate([
             'token_firebase' => 'required'
-        ]);*/
-        //NotificationDevice::where('token', $data['token_firebase'])->delete();
+        ]);
+        NotificationDevice::where('token', $data['token_firebase'])->delete();
         try {
             $user = $request->user();
             $user->currentAccessToken()->delete();

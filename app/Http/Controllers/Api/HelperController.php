@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
-//use App\Models\NotificationDevice;
 use App\Models\Helper;
+use App\Models\NotificationDevice;
 use App\Models\User;
-use App\Models\Workday;
-use Carbon\Carbon;
+use App\Models\WorkShift;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,18 +20,20 @@ class HelperController extends Controller
         $data = $request->validate([
             'name' => 'required|string',
             'last_name' => 'required|string',
-            'ci' => 'string',
-            'home_address' => 'string',
-            'birthday' => 'string',
+            'ci' => 'sometimes|string',
+            'home_address' => 'sometimes|string',
+            'birthday' => 'sometimes|string',
             'sex' => 'required|string',
             'cellphone' => 'required|string',
             'email' => 'required|email',
             'password' => 'required|string|confirmed',
             'type_helper' => 'required|string',
-            'rank' => 'string',
+            'rank' => 'sometimes|string',
             'emergency_unit' => 'required|string',
-            'start_turn' => 'required|date_format:H:i',
-            'end_turn' => 'required|date_format:H:i',
+            'start_turn' => 'required|string',
+            //'start_turn' => 'required|date_format:H:i',
+            'end_turn' => 'required|string',
+            //'end_turn' => 'required|date_format:H:i',
             'workdays' => 'required|array|min:1',
             'token_name' => 'required|string'
         ]);
@@ -66,10 +67,10 @@ class HelperController extends Controller
                     'user_id' => $user->id,
                     'type' => $data['type_helper'],
                     'rank' => array_key_exists('rank', $data) ? $data['rank'] : null,
-                    'emergency_unit' => $data['emergency_unit']
+                    //'emergency_unit' => $data['emergency_unit']
                 ]);
-                for($i = 0; $i < count($data['workdays']); $i++){
-                    Workday::create([
+                for ($i = 0; $i < count($data['workdays']); $i++) {
+                    WorkShift::create([
                         'day_turn' => $data['workdays'][$i],
                         'start_turn' => $data['start_turn'],
                         'end_turn' => $data['end_turn'],
@@ -81,7 +82,7 @@ class HelperController extends Controller
                     'user' => $user, 'token' => $token], 201);
             });
         } catch (Exception $e) {
-            return response(['message' => 'Error registro no completado'],
+            return response(['message' => 'Error registro no completado ' . $e->getMessage()],
                 406);
         }
     }
@@ -92,7 +93,7 @@ class HelperController extends Controller
             'email' => 'required|email',
             'password' => 'required|string',
             'token_name' => 'required|string',
-            //'token_firebase' => 'required|string'
+            'token_firebase' => 'required|string'
         ]);
         $user = User::where('email', $data['email'])->first();
         if (!$user) {
@@ -110,6 +111,11 @@ class HelperController extends Controller
                 'message' => 'Verifique su correo para poder ingresar',
             ], 403);
         }
+        NotificationDevice::create([
+            'name_device' => $data['token_name'],
+            'token' => $data['token_firebase'],
+            'user_id' => $user->id
+        ]);
         $token = $user->createToken($data['token_name'])->plainTextToken;
         $user = User::join('helpers', 'helpers.user_id', 'users.id')
             ->select('users.*', 'helpers.id as id_helper', 'helpers.type as type_helper',
@@ -125,10 +131,10 @@ class HelperController extends Controller
 
     public function logout(Request $request)
     {
-        /*$data = $request->validate([
+        $data = $request->validate([
             'token_firebase' => 'required'
-        ]);*/
-        //NotificationDevice::where('token', $data['token_firebase'])->delete();
+        ]);
+        NotificationDevice::where('token', $data['token_firebase'])->delete();
         try {
             $user = $request->user();
             $user->currentAccessToken()->delete();
@@ -143,10 +149,11 @@ class HelperController extends Controller
         try {
             $user = User::join('helpers', 'helpers.user_id', 'users.id')
                 ->select('users.*', 'helpers.id as id_helper', 'helpers.type as type_helper',
-                    'helpers.rank', 'helpers.emergency_unit', 'helpers.in_turn'
+                    'helpers.rank', 'helpers.emergency_unit', 'helpers.in_turn',
+                    'helpers.start_turn', 'helpers.end_turn'
                 )
                 ->where('users.id', $request->user()->id)->first();
-            $workdays = Workday::where('helper_id', $user->id_helper)->get()->toArray();
+            $workdays = WorkShift::where('helper_id', $user->id_helper)->get()->toArray();
             return [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -162,6 +169,8 @@ class HelperController extends Controller
                 'rank' => $user->rank,
                 'emergency_unit' => $user->emergency_unit,
                 'in_turn' => $user->in_turn,
+                'start_turn' => $user->start_turn,
+                'end_turn' => $user->end_turn,
                 'workdays' => $workdays
             ];
         } catch (Exception $e) {

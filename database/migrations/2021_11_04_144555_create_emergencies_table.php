@@ -15,23 +15,13 @@ class CreateEmergenciesTable extends Migration
     {
         Schema::create('emergencies', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('citizen_id');
-            $table->unsignedBigInteger('type_institution_id');
+            $table->string('type');
             $table->string('description');
-            $table->string('location'); //TODO: It's supposed to be a coordinate
+            $table->double('longitude')->nullable();
+            $table->double('latitude')->nullable();
+            $table->foreignId('civilian_id')->references('id')
+                ->on('civilians');
             $table->timestamps();
-
-            $table->foreign('citizen_id')
-                ->references('id')
-                ->on('cityzens')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-
-            $table->foreign('type_institution_id')
-                ->references('id')
-                ->on('type_institutions')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
         });
     }
 
