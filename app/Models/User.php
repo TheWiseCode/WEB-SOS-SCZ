@@ -49,16 +49,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function notificationDevices(){
+    public function notificationDevices()
+    {
         return $this->hasMany(NotificationDevice::class);
     }
 
-    public function Citizen(){
-        return $this->hasOne(Cityzen::class,'user_id');
+    public function civilian()
+    {
+        return $this->belongsTo(Civilian::class);
     }
 
-    public function Officer(){
-        return $this->hasOne(Officer::class,'user_id');
+    public function operator()
+    {
+        return $this->belongsTo(Operator::class);
+    }
+
+    public function helper()
+    {
+        return $this->belongsTo(Helper::class);
     }
 
 }
