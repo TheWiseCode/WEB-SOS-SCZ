@@ -47,6 +47,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'birthday' => 'date:d-m-Y',
     ];
 
     public function notificationDevices()

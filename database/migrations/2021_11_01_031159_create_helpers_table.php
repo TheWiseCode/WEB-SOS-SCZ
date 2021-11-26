@@ -15,9 +15,9 @@ class CreateHelpersTable extends Migration
     {
         Schema::create('helpers', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->string('type')->default('Define it');
             $table->string('rank')->nullable();
-            $table->boolean('in_turn')->default('false');
+            $table->boolean('in_turn')->default(false);
             $table->double('longitude')->nullable();
             $table->double('latitude')->nullable();
             $table->foreignId('user_id')->references('id')->on('users');
