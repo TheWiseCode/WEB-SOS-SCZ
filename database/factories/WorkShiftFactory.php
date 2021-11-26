@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class HelperFactory extends Factory
+class WorkShiftFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -14,9 +14,9 @@ class HelperFactory extends Factory
     public function definition()
     {
         return [
-            'longitude' => $this->faker->longitude(),
-            'latitude' => $this->faker->latitude(),
-            'rank' => $this->faker->jobTitle(),
+            'day_turn' => $this->faker->date('Y-m-d'),
+            'start_turn' => $this->faker->time(),
+            'end_turn' => $this->faker->time(),
         ];
     }
 }

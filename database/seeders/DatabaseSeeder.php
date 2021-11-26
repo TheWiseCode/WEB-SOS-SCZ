@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Civilian;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,7 +20,10 @@ class DatabaseSeeder extends Seeder
          $this->call([
              CivilianSeeder::class,
              OperatorSeeder::class,
-             HelperSeeder::class
+             HelperSeeder::class,
+             EmergencyUnitSeeder::class,
+             EmergencySeeder::class,
+             WorkShiftSeeder::class,
          ]);
 
 

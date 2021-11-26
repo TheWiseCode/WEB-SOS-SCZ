@@ -17,8 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/civilians',function (){
-    $users = \App\Models\User::all();
-    $user_id_collection = $users->where('type', '=', '1');
-    return $user_id_collection;
+Route::get('/helpers',function (){
+    $helpers = \App\Models\Helper::all()->pluck('id');
+    //$user_id_collection = $users->where('type', '=', '3')->sortDesc()->pluck('id');
+    return $helpers;
 });

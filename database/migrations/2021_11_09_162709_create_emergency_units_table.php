@@ -15,7 +15,7 @@ class CreateEmergencyUnitsTable extends Migration
     {
         Schema::create('emergency_units', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->string('type'); // 1= a pie, 2= motocicleta, 3= vehiculo, 4= animal
             $table->string('vehicle_license')->nullable();
             $table->string('description')->nullable();
             $table->foreignId('helper_id')->references('id')->on('helpers');

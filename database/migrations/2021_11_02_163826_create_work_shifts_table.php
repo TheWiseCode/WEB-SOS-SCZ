@@ -15,7 +15,7 @@ class CreateWorkShiftsTable extends Migration
     {
         Schema::create('work_shifts', function (Blueprint $table) {
             $table->id();
-            $table->string('day_turn');
+            $table->date('day_turn');
             $table->time('start_turn');
             $table->time('end_turn');
             $table->foreignId('helper_id')->references('id')->on('helpers');
