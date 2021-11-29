@@ -31,9 +31,7 @@ class HelperController extends Controller
             'rank' => 'sometimes|string',
             'emergency_unit' => 'required|string',
             'start_turn' => 'required|string',
-            //'start_turn' => 'required|date_format:H:i',
             'end_turn' => 'required|string',
-            //'end_turn' => 'required|date_format:H:i',
             'workdays' => 'required|array|min:1',
             'token_name' => 'required|string'
         ]);
@@ -119,7 +117,7 @@ class HelperController extends Controller
         $token = $user->createToken($data['token_name'])->plainTextToken;
         $user = User::join('helpers', 'helpers.user_id', 'users.id')
             ->select('users.*', 'helpers.id as id_helper', 'helpers.type as type_helper',
-                'helpers.rank', 'helpers.emergency_unit', 'helpers.in_turn'
+                'helpers.rank', 'helpers.in_turn'
             )
             ->where('users.id', $user->id)
             ->first();
