@@ -147,7 +147,7 @@ class HelperController extends Controller
         try {
             $user = User::join('helpers', 'helpers.user_id', 'users.id')
                 ->select('users.*', 'helpers.id as id_helper', 'helpers.type as type_helper',
-                    'helpers.rank', 'helpers.emergency_unit', 'helpers.in_turn',
+                    'helpers.rank', 'helpers.in_turn',
                     'helpers.start_turn', 'helpers.end_turn'
                 )
                 ->where('users.id', $request->user()->id)->first();
@@ -165,7 +165,8 @@ class HelperController extends Controller
                 'id_helper' => $user->id_helper,
                 'type_helper' => $user->type_helper,
                 'rank' => $user->rank,
-                'emergency_unit' => $user->emergency_unit,
+                //'emergency_unit' => $user->emergency_unit,
+                'emergency_unit' => 'falta',
                 'in_turn' => $user->in_turn,
                 'start_turn' => $user->start_turn,
                 'end_turn' => $user->end_turn,
