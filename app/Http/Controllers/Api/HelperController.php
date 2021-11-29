@@ -147,8 +147,8 @@ class HelperController extends Controller
         try {
             $user = User::join('helpers', 'helpers.user_id', 'users.id')
                 ->select('users.*', 'helpers.id as id_helper', 'helpers.type as type_helper',
-                    'helpers.rank', 'helpers.in_turn',
-                    'helpers.start_turn', 'helpers.end_turn'
+                    'helpers.rank', 'helpers.in_turn'
+                    //,'helpers.start_turn', 'helpers.end_turn'
                 )
                 ->where('users.id', $request->user()->id)->first();
             $workdays = WorkShift::where('helper_id', $user->id_helper)->get()->toArray();
@@ -168,8 +168,8 @@ class HelperController extends Controller
                 //'emergency_unit' => $user->emergency_unit,
                 'emergency_unit' => 'falta',
                 'in_turn' => $user->in_turn,
-                'start_turn' => $user->start_turn,
-                'end_turn' => $user->end_turn,
+                'start_turn' => $workdays[0]['start_turn'],
+                'end_turn' => $workdays[0]['end_turn'],
                 'workdays' => $workdays
             ];
         } catch (Exception $e) {
