@@ -173,7 +173,7 @@ class HelperController extends Controller
                 'workdays' => $workdays
             ];
         } catch (Exception $e) {
-            return response(['message' => 'Error desconocido'], 406);
+            return response(['message' => 'Error desconocido', 'error' => $e], 406);
         }
     }
 }
