@@ -12,6 +12,7 @@ class Emergency extends Model
     protected $table = 'emergencies';
     protected $fillable = [
         'type',
+        'state',
         'description',
         'longitude',
         'latitude',

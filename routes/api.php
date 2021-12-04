@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CivilianController;
+use App\Http\Controllers\Api\EmergencyController;
 use App\Http\Controllers\Api\HelperController;
 use App\Http\Controllers\Api\OperatorController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::prefix('civilian')->group(function () {
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('', [CivilianController::class, 'civilian']);
         Route::delete('/logout', [CivilianController::class, 'logout']);
+        Route::post('/request-emergency', [EmergencyController::class, 'requestEmergency']);
     });
 });
 
@@ -50,3 +52,4 @@ Route::prefix('helper')->group(function () {
         Route::delete('/logout', [HelperController::class, 'logout']);
     });
 });
+Route::apiResource('/emergencies', EmergencyController::class);

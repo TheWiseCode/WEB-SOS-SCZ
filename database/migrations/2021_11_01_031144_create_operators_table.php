@@ -17,6 +17,7 @@ class CreateOperatorsTable extends Migration
             $table->id();
             $table->boolean('in_turn')->default(false);
             $table->foreignId('user_id')->references('id')->on('users');
+            $table->boolean('in_turn')->default(false);
             $table->timestamps();
         });
     }
