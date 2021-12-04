@@ -120,6 +120,10 @@ class OperatorController extends Controller
         }
     }
 
+    public function changeState(Request $request){
+        $user = $request->user();
+    }
+
     public function operator(Request $request)
     {
         try {

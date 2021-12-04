@@ -18,6 +18,7 @@ class CreateHelpersTable extends Migration
             $table->string('type')->default('Define it');
             $table->string('rank')->nullable();
             $table->boolean('in_turn')->default(false);
+            $table->boolean('is_free')->default(true);
             $table->double('longitude')->nullable();
             $table->double('latitude')->nullable();
             $table->foreignId('user_id')->references('id')->on('users');

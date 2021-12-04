@@ -34,6 +34,7 @@ Route::prefix('operator')->group(function () {
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('', [OperatorController::class, 'operator']);
+        Route::post('/change-state', [OperatorController::class, 'changeState']);
         Route::delete('/logout', [OperatorController::class, 'logout']);
     });
 });
@@ -45,6 +46,7 @@ Route::prefix('helper')->group(function () {
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('', [HelperController::class, 'helper']);
+        Route::post('/change-state', [OperatorController::class, 'changeState']);
         Route::delete('/logout', [HelperController::class, 'logout']);
     });
 });
