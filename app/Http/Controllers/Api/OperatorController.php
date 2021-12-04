@@ -120,15 +120,22 @@ class OperatorController extends Controller
         }
     }
 
-    public function changeState(Request $request){
-        $user = $request->user();
+    public function changeState(Request $request)
+    {
+        $data = $request->validate([
+            'in_turn' => 'required'
+        ]);
+        $operator = Operator::where('user_id', $request->user()->id)->first();
+        $operator->in_turn = !$data['in_turn'];
+        $operator->save();
+        return response(['message' => 'Estado en turno cambiado'], 200);
     }
 
     public function operator(Request $request)
     {
         try {
             return User::join('operators', 'operators.user_id', 'users.id')
-                ->select('users.*', 'operators.id as id_operator')
+                ->select('users.*', 'operators.id as id_operator', 'operators.in_turn')
                 ->where('users.id', $request->user()->id)
                 ->first();
         } catch (Exception $e) {

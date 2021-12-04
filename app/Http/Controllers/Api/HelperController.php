@@ -142,13 +142,24 @@ class HelperController extends Controller
         }
     }
 
+    public function changeState(Request $request)
+    {
+        $data = $request->validate([
+            'in_turn' => 'required'
+        ]);
+        $helper = Helper::where('user_id', $request->user()->id)->first();
+        $helper->in_turn = !$data['in_turn'];
+        $helper->save();
+        return response(['message' => 'Estado en turno cambiado'], 200);
+    }
+
     public function helper(Request $request)
     {
         try {
             $user = User::join('helpers', 'helpers.user_id', 'users.id')
                 ->select('users.*', 'helpers.id as id_helper', 'helpers.type as type_helper',
                     'helpers.rank', 'helpers.in_turn'
-                    //,'helpers.start_turn', 'helpers.end_turn'
+                //,'helpers.start_turn', 'helpers.end_turn'
                 )
                 ->where('users.id', $request->user()->id)->first();
             $workdays = WorkShift::where('helper_id', $user->id_helper)->get()->toArray();
