@@ -78,8 +78,7 @@ class EmergencyController extends Controller
         $url = 'https://fcm.googleapis.com/fcm/send';
         $headers = [
             'Authorization' => 'key=' . env('FCM_OPERATOR_API_KEY'),
-            'Content-Type' => 'application/json',
-            'accept:' => '*/*'
+            'Content-Type' => 'application/json'
         ];
         $notification = [
             'title' => $emergency->civilian->user->name . ' tiene una emergencia!',
