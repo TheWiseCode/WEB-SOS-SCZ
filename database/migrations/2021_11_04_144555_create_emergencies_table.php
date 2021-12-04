@@ -15,7 +15,7 @@ class CreateEmergenciesTable extends Migration
     {
         Schema::create('emergencies', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->string('type'); //1= paramedica, 2= policial, 3=incendiaria
             $table->string('description');
             $table->double('longitude')->nullable();
             $table->double('latitude')->nullable();

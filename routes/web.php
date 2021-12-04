@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/helpers',function (){
+    $helpers = \App\Models\Helper::all()->pluck('id');
+    //$user_id_collection = $users->where('type', '=', '3')->sortDesc()->pluck('id');
+    return $helpers;
+});
