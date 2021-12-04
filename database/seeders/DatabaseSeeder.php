@@ -13,10 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
-
-
-         \App\Models\User::factory(100)->create();
+         /*\App\Models\User::factory(100)->create();
          $this->call([
              CivilianSeeder::class,
              OperatorSeeder::class,
@@ -24,19 +21,6 @@ class DatabaseSeeder extends Seeder
              EmergencyUnitSeeder::class,
              EmergencySeeder::class,
              WorkShiftSeeder::class,
-         ]);
-
-
-
-/*
-        $users = User::all();
-        $civilians = $users->where('type', '=', '1')->sortDesc()->pluck('id');
-
-
-        for($i = $civilians->count(); $i>0; $i--){
-            Civilian::factory()->count(1)->create(['user_id' => $civilians->pop()]);
-        }
-*/
-
+         ]);*/
     }
 }
