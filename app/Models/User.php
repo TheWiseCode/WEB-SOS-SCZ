@@ -57,12 +57,12 @@ class User extends Authenticatable
 
     public function civilian()
     {
-        return $this->belongsTo(Civilian::class);
+        return $this->hasOne(Civilian::class);
     }
 
     public function operator()
     {
-        return $this->belongsTo(Operator::class);
+        return $this->hasOne(Operator::class);
     }
 
     public function helper()
