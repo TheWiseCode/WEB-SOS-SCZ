@@ -55,9 +55,9 @@ class CivilianController extends Controller
                 ]);
                 $user->markEmailAsVerified();
                 Civilian::create(['user_id' => $user->id]);
-                $token = $user->createToken($data['token_name'])->plainTextToken;
+                //$token = $user->createToken($data['token_name'])->plainTextToken;
                 return response(['message' => 'Registro finalizado correctamente',
-                    'user' => $user, 'token' => $token], 201);
+                    'user' => $user], 201);
             });
         } catch (Exception $e) {
             return response(['message' => 'Error registro no completado'],
