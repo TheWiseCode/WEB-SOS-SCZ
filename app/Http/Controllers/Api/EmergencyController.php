@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateEmergencyRequest;
 use App\Models\Civilian;
 use App\Models\Emergency;
+use App\Models\Helper;
 use App\Models\Operator;
 use App\Models\User;
 use Carbon\Carbon;
@@ -43,13 +44,16 @@ class EmergencyController extends Controller
             'longitude' => $emergency->longitude,
             'latitude' => $emergency->latitude,
         ];
-        return Http::withHeaders($headers)->post(
+        $helpers = Helper::where('in_turn', false)->where('is_free', true)->get();
+        dd($helpers);
+        return $data;
+        /*return Http::withHeaders($headers)->post(
             $url . '?=', [
             'to' => '/topics/in_turn_operators',
             'priority' => 'high',
             'notification' => $notification,
             'data' => $data
-        ]);
+        ]);*/
     }
 
     public function requestEmergency(Request $request)
