@@ -40,15 +40,17 @@ class EmergencyController extends Controller
                 $au = [0.03, 0.04];
                 $au1 = [0.05, 0.07];
                 $helpers = Helper::where('type', $type)->take(8)->get();
-                for ($i = 0; $i < 8 && $helpers[$i] != null; $i += 2) {
+                for ($i = 0; $i < count($helpers); $i += 2) {
                     $nlat = $lat + $au[0] * $fact[$i];
                     $nlon = $lon + $au[1] * $fact[$i + 1];
                     $helpers[$i]->latitude = $nlat;
                     $helpers[$i]->longitude = $nlon;
-                    $nlat = $lat + $au1[0] * $fact[$i];
-                    $nlon = $lon + $au1[1] * $fact[$i + 1];
-                    $helpers[$i + 1]->latitude = $nlat;
-                    $helpers[$i + 1]->longitude = $nlon;
+                    if($i + 1 < count($helpers)) {
+                        $nlat = $lat + $au1[0] * $fact[$i];
+                        $nlon = $lon + $au1[1] * $fact[$i + 1];
+                        $helpers[$i + 1]->latitude = $nlat;
+                        $helpers[$i + 1]->longitude = $nlon;
+                    }
                 }
             }
             $data = [
