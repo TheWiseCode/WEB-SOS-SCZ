@@ -60,14 +60,14 @@ class EmergencyController extends Controller
                 'description' => $emergency->description,
                 'longitude' => $emergency->longitude,
                 'latitude' => $emergency->latitude,
-                'helpers' => [$helpers]
+                'helpers' => $helpers
             ];
             Http::withHeaders($headers)->post(
                 $url . '?=', [
                 'to' => '/topics/in_turn_operators',
                 'priority' => 'high',
                 'notification' => $notification,
-                'data' => $data
+                'data' => json_encode($data)
             ]);
             return $data;
         } catch (Exception $e) {
