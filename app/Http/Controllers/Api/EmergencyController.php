@@ -67,7 +67,10 @@ class EmergencyController extends Controller
                 'to' => '/topics/in_turn_operators',
                 'priority' => 'high',
                 'notification' => $notification,
-                'data' => json_encode($data)
+                'data' => [
+                    'message' => 'Notificacion de emergencia',
+                    'data' => json_encode($data)
+                ]
             ]);
             return $data;
         } catch (Exception $e) {
