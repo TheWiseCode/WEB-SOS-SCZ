@@ -52,4 +52,3 @@ Route::prefix('helper')->group(function () {
         Route::delete('/logout', [HelperController::class, 'logout']);
     });
 });
-Route::apiResource('/emergencies', EmergencyController::class);

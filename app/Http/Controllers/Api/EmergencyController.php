@@ -3,29 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateEmergencyRequest;
 use App\Models\Civilian;
 use App\Models\Emergency;
 use App\Models\Helper;
-use App\Models\Operator;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Ramsey\Collection\Collection;
 
 class EmergencyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
     public function sendEmergency(Emergency $emergency)
     {
         $url = 'https://fcm.googleapis.com/fcm/send';
@@ -37,23 +24,47 @@ class EmergencyController extends Controller
             'title' => $emergency->civilian->user->name . ' tiene una emergencia!',
             'body' => $emergency->description . ' ' . Carbon::now(),
         ];
+        $lat = $emergency->latitude;
+        $lon = $emergency->longitude;
+        $type = $emergency->type;
+        $query = "select a.id, b.name, b.last_name, b.cellphone,
+                    a.rank, a.longitude, a.latitude, a.user_id
+                from helpers a inner join users b on a.user_id = b.id
+                where a.in_turn = true and a.is_free = true and a.longitude is not null and a.latitude is not null
+                    and a.type = '{$type}' and distance({$lat},{$lon}, a.latitude, a.longitude) < 5";
+        $helpers = DB::select($query);
+        if (count($helpers) < 2) {
+            $fact = [1, 1, 1, -1, -1, 1, -1, -1];
+            $au = [0.03, 0.04];
+            $au1 = [0.05, 0.07];
+            $helpers = Helper::where('type', $type)->take(8)->get();
+            for ($i = 0; $i < 8 && $helpers[$i] != null; $i += 2) {
+                $nlat = $lat + $au[0] * $fact[$i];
+                $nlon = $lon + $au[1] * $fact[$i + 1];
+                $helpers[$i]->latitude = $nlat;
+                $helpers[$i]->longitude = $nlon;
+                $nlat = $lat + $au1[0] * $fact[$i];
+                $nlon = $lon + $au1[1] * $fact[$i + 1];
+                $helpers[$i + 1]->latitude = $nlat;
+                $helpers[$i + 1]->longitude = $nlon;
+            }
+        }
         $data = [
             'id' => $emergency->id,
             'user' => $emergency->civilian->user,
             'type' => $emergency->type,
             'longitude' => $emergency->longitude,
             'latitude' => $emergency->latitude,
+            'helpers' => $helpers
         ];
-        $helpers = Helper::where('in_turn', false)->where('is_free', true)->get();
-        dd($helpers);
-        return $data;
-        /*return Http::withHeaders($headers)->post(
+        //return $data;
+        return Http::withHeaders($headers)->post(
             $url . '?=', [
             'to' => '/topics/in_turn_operators',
             'priority' => 'high',
             'notification' => $notification,
             'data' => $data
-        ]);*/
+        ]);
     }
 
     public function requestEmergency(Request $request)
@@ -76,70 +87,4 @@ class EmergencyController extends Controller
         return response($response, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(CreateEmergencyRequest $request)
-    {
-        $citizen = Civilian::find($request->civilian_id);
-        //$type = type_institution::find($request->type_institution_id);
-        if (!$citizen) {
-            abort(404, 'Some object not found');
-        }
-
-        $new_emergency = Emergency::create($request->validated());
-        $responde = $this->sendEmergency($new_emergency);
-
-        return $responde;
-        /*
-        //Devuelve el token de los operadores actualmente en turno (in_turn = true)
-        $in_turn_operators = Operator::where('in_turn','=',false)->pluck('user_id');
-        $items = collect([]);
-        foreach ($in_turn_operators as $op){
-//            array_push($items,\App\Models\NotificationDevice::where('user_id','=',$op)->pluck('token'));
-            $items->push(\App\Models\NotificationDevice::where('user_id','=',$op)->pluck('token'));
-        }
-
-        $ready_token = (String)json_encode($items->pop());
-
-        */
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
