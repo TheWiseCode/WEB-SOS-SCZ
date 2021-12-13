@@ -45,7 +45,7 @@ class EmergencyController extends Controller
                     $nlon = $lon + $au[1] * $fact[$i + 1];
                     $helpers[$i]->latitude = $nlat;
                     $helpers[$i]->longitude = $nlon;
-                    if($i + 1 < $helpers->count()) {
+                    if ($i + 1 < $helpers->count()) {
                         $nlat = $lat + $au1[0] * $fact[$i];
                         $nlon = $lon + $au1[1] * $fact[$i + 1];
                         $helpers[$i + 1]->latitude = $nlat;
@@ -60,7 +60,7 @@ class EmergencyController extends Controller
                 'description' => $emergency->description,
                 'longitude' => $emergency->longitude,
                 'latitude' => $emergency->latitude,
-                'helpers' => $helpers
+                'helpers' => [$helpers]
             ];
             Http::withHeaders($headers)->post(
                 $url . '?=', [
@@ -70,7 +70,7 @@ class EmergencyController extends Controller
                 'data' => $data
             ]);
             return $data;
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return $e;
         }
     }
