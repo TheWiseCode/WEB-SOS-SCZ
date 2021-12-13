@@ -37,8 +37,8 @@ class EmergencyController extends Controller
             $helpers = DB::select($query);
             if (count($helpers) == 0) {
                 $fact = [1, 1, 1, -1, -1, 1, -1, -1];
-                $au = [0.03, 0.04];
-                $au1 = [0.05, 0.07];
+                $au = [0.003, 0.004];
+                $au1 = [0.005, 0.007];
                 $helpers = Helper::where('type', $type)->take(8)->get();
                 for ($i = 0; $i < $helpers->count(); $i += 2) {
                     $nlat = $lat + $au[0] * $fact[$i];
