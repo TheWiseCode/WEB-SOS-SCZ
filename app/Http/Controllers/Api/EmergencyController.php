@@ -7,6 +7,7 @@ use App\Models\Civilian;
 use App\Models\Emergency;
 use App\Models\Helper;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -57,13 +58,14 @@ class EmergencyController extends Controller
             'latitude' => $emergency->latitude,
             'helpers' => $helpers
         ];
-        return Http::withHeaders($headers)->post(
+        Http::withHeaders($headers)->post(
             $url . '?=', [
             'to' => '/topics/in_turn_operators',
             'priority' => 'high',
             'notification' => $notification,
             'data' => $data
         ]);
+        return $data;
     }
 
     public function requestEmergency(Request $request)
@@ -85,7 +87,7 @@ class EmergencyController extends Controller
             ]);
             $response = $this->sendEmergency($emergency);
             return response($response, 201);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response(['error' => $e], 500);
         }
     }
