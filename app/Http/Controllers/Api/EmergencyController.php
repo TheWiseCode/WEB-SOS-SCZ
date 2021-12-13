@@ -35,7 +35,7 @@ class EmergencyController extends Controller
                 where a.in_turn = true and a.is_free = true and a.longitude is not null and a.latitude is not null
                     and a.type = '{$type}' and distance({$lat},{$lon}, a.latitude, a.longitude) < 5";
             $helpers = DB::select($query);
-            if (count($helpers) < 2) {
+            if (count($helpers) == 0) {
                 $fact = [1, 1, 1, -1, -1, 1, -1, -1];
                 $au = [0.03, 0.04];
                 $au1 = [0.05, 0.07];
@@ -57,6 +57,7 @@ class EmergencyController extends Controller
                 'id' => $emergency->id,
                 'user' => $emergency->civilian->user,
                 'type' => $emergency->type,
+                'description' => $emergency->description,
                 'longitude' => $emergency->longitude,
                 'latitude' => $emergency->latitude,
                 'helpers' => $helpers
