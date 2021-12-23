@@ -13,14 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         /*\App\Models\User::factory(100)->create();
+         //\App\Models\User::factory(100)->create();
          $this->call([
-             CivilianSeeder::class,
+             UsersSeeder::class,
+             /*CivilianSeeder::class,
              OperatorSeeder::class,
              HelperSeeder::class,
              EmergencyUnitSeeder::class,
              EmergencySeeder::class,
-             WorkShiftSeeder::class,
-         ]);*/
+             WorkShiftSeeder::class,*/
+         ]);
     }
 }
