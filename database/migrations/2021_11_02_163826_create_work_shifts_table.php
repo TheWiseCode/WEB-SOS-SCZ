@@ -18,8 +18,12 @@ class CreateWorkShiftsTable extends Migration
             $table->string('day_turn');
             $table->time('start_turn');
             $table->time('end_turn');
-            $table->foreignId('helper_id')->references('id')->on('helpers');
+            $table->unsignedBigInteger('helper_id')->nullable();
+            $table->unsignedBigInteger('operator_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('helper_id')->references('id')->on('helpers')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('operator_id')->references('id')->on('operators')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

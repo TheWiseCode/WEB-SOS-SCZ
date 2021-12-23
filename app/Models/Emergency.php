@@ -23,4 +23,12 @@ class Emergency extends Model
     {
         return $this->belongsTo(Civilian::class);
     }
+
+    public function operator(){
+        return $this->belongsTo(Operator::class);
+    }
+
+    public function helper(){
+        return $this->belongsTo(Helper::class);
+    }
 }

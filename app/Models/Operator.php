@@ -16,4 +16,8 @@ class Operator extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function emergency(){
+        return $this->hasMany(Emergency::class);
+    }
 }

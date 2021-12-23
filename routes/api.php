@@ -52,4 +52,21 @@ Route::prefix('helper')->group(function () {
         Route::delete('/logout', [HelperController::class, 'logout']);
     });
 });
-Route::apiResource('/emergencies', EmergencyController::class);
+//Route::apiResource('/eemergencies', EmergencyController::class);
+
+Route::group(['prefix' => 'emergency','middleware' => 'auth:sanctum'], function(){
+    Route::get('by-civil/{id}', [EmergencyController::class,'getEmergenciesByCivil']);
+    Route::get('by-operator/{id}', [EmergencyController::class,'getEmergenciesByOperator']);
+    Route::get('by-helper/{id}', [EmergencyController::class,'getEmergenciesByHelper']);
+    Route::get('new-emergencies',[EmergencyController::class,'ViewNewEmergencies']);
+    Route::post('store',[EmergencyController::class,'store']);
+    Route::post('accepted-emergency-operator',[EmergencyController::class,'EmergencyAcceptedByOperator']);
+    Route::post('assign-emergency-to-helper',[EmergencyController::class,'EmergencyAssignedToHelper']);
+});
+
+
+Route::group(['prefix' => 'location-history','middleware' => 'auth:sanctum'], function(){
+    Route::get('by-helper/{id}', [\App\Http\Controllers\Api\LocationHistoryController::class,'getHistoryByHelper']);
+    Route::get('by-date/{id}', [\App\Http\Controllers\Api\LocationHistoryController::class,'getHistoryByDate']);
+    Route::post('store',[\App\Http\Controllers\Api\LocationHistoryController::class,'store']);
+});

@@ -20,8 +20,13 @@ class CreateEmergenciesTable extends Migration
             $table->double('longitude')->nullable();
             $table->double('latitude')->nullable();
             $table->string('state')->default('1'); //1=:pendiente; 2=en curso; 3=finalizada
-            $table->foreignId('civilian_id')->references('id')
-                ->on('civilians');
+            $table->unsignedBigInteger('operator_id')->nullable();
+            $table->unsignedBigInteger('helper_id')->nullable();
+
+
+            $table->foreignId('civilian_id')->references('id')->on('civilians')->cascadeOnUpdate();
+            $table->foreign('operator_id')->references('id')->on('operators')->cascadeOnUpdate();
+            $table->foreign('helper_id')->references('id')->on('helpers')->cascadeOnUpdate();
             $table->timestamps();
 
         });
