@@ -7,6 +7,7 @@ use App\Http\Requests\CreateEmergencyRequest;
 use App\Models\Civilian;
 use App\Models\Emergency;
 use App\Models\Helper;
+use App\Models\NotificationDevice;
 use App\Models\Operator;
 use App\Models\User;
 use Carbon\Carbon;
@@ -167,10 +168,11 @@ class EmergencyController extends Controller
         ]);
 
         $helper_userId =  $helper->user_id;
-        return $this->sendNotificationToHelper($helper_userId, $emergency);
+        $helper_device = NotificationDevice::where('user_id', $helper_userId)->get();
+        return $this->sendNotificationToHelper($helper_device->token, $emergency);
     }
 
-    public function sendNotificationToHelper($helper_userId,Emergency $emergency){
+    public function sendNotificationToHelper($helper_token,Emergency $emergency){
         $url = 'https://fcm.googleapis.com/fcm/send';
         $headers = [
             'Authorization' => 'key=' . env('FCM_OPERATOR_API_KEY'),
@@ -189,7 +191,7 @@ class EmergencyController extends Controller
         ];
         return Http::withHeaders($headers)->post(
             $url . '?=', [
-            'to' => '/topics/in_turn_helpers/' . $helper_userId, //TODO: QUE CADA RESCATISTA SE SUBCRIBA A UN CANAL CON SU ID EN EL FRONT
+            'to' => $helper_token, //TODO: QUE CADA RESCATISTA SE SUBCRIBA A UN CANAL CON SU ID EN EL FRONT
             'priority' => 'high',
             'notification' => $notification,
             'data' => $data
