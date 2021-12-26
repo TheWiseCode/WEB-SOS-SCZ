@@ -41,7 +41,7 @@ class EmergencyController extends Controller
                 $au1 = [0.005, 0.007];
                 $helpers = Helper::join('users', 'users.id', 'helpers.user_id')
                     ->where('helpers.type', $type)
-                    ->select('helpers.id', 'user.name', 'users.last_name', 'users.cellphone',
+                    ->select('helpers.id', 'users.name', 'users.last_name', 'users.cellphone',
                         'helpers.type', 'helpers.rank', 'helpers.in_turn', 'helpers.is_free',
                         'helpers.longitude', 'helpers.latitude', 'helpers.user_id')
                     ->take(8)->get();
