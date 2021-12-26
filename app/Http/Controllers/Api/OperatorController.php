@@ -9,10 +9,12 @@ use App\Models\Helper;
 use App\Models\NotificationDevice;
 use App\Models\Operator;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class OperatorController extends Controller
 {
@@ -145,18 +147,54 @@ class OperatorController extends Controller
                 return response(['message' => 'Emergencia ya atendida'], 401);
             }
             $helper = Helper::find($data['id_helper']);
-            if($helper && !$helper->is_free){
+            if ($helper && !$helper->is_free) {
                 return response(['message' => 'Rescatista ya está ocupado'], 402);
             }
             $emergency->state = 'progress';
             $helper->is_free = false;
             $emergency->save();
             $helper->save();
+            $this->sendEmergency($emergency, $helper);
             return response(['message' => 'Emergencia atendida'], 200);
 
         } catch (Exception $e) {
             return response(['message' => 'Error desconocido'], 500);
         }
+    }
+
+    private function sendEmergency(Emergency $emergency, Helper $helper)
+    {
+        $tokens = NotificationDevice::where('user_id', $helper->user_id)->get();
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $headers = [
+            'Authorization' => 'key=' . env('FCM_RESCATISTA_API_KEY'),
+            'Content-Type' => 'application/json'
+        ];
+        $notification = [
+            'title' => $emergency->civilian->user->name . ' tiene una emergencia!',
+            'body' => $emergency->description . ' ' . Carbon::now(),
+        ];
+        $data = [
+            'id' => $emergency->id,
+            'type' => $emergency->type,
+            'description' => $emergency->description,
+            'longitude' => $emergency->longitude,
+            'latitude' => $emergency->latitude,
+            'user' => $emergency->civilian->user,
+        ];
+        foreach ($tokens as $tok) {
+            Http::withHeaders($headers)->post(
+                $url . '?=', [
+                'to' => $tok->token,
+                'priority' => 'high',
+                'notification' => $notification,
+                'data' => [
+                    'message' => 'Notificacion de emergencia',
+                    'data' => json_encode($data)
+                ]
+            ]);
+        }
+        return $data;
     }
 
     public function operator(Request $request)
