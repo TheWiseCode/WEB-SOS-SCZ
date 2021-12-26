@@ -94,7 +94,7 @@ class EmergencyController extends Controller
         try {
             $civilian = Civilian::where('user_id', $request->user()->id)->first();
             $emergency = Emergency::create([
-                'type' => $data['type'],
+                'type' => strtolower($data['type']),
                 'description' => $data['description'],
                 'longitude' => $data['longitude'],
                 'latitude' => $data['latitude'],
