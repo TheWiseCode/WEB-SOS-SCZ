@@ -35,6 +35,7 @@ Route::prefix('operator')->group(function () {
     Route::post('/login', [OperatorController::class, 'login']);
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::post('/assign-helper-emergency', [OperatorController::class, 'assignHelperEmergency']);
         Route::get('', [OperatorController::class, 'operator']);
         Route::post('/change-state', [OperatorController::class, 'changeState']);
         Route::delete('/logout', [OperatorController::class, 'logout']);

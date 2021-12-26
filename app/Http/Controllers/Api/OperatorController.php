@@ -131,6 +131,14 @@ class OperatorController extends Controller
         return response(['message' => 'Estado en turno cambiado'], 200);
     }
 
+    public function assignHelperEmergency(Request $request){
+        $data = $request->validate([
+            'id_emergency' => 'required',
+            'id_helper' =>'required'
+        ]);
+        return response(['message' => 'algo'], 200);
+    }
+
     public function operator(Request $request)
     {
         try {
