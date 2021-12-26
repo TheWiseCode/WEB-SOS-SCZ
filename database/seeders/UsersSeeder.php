@@ -64,7 +64,7 @@ class UsersSeeder extends Seeder
             ]);
             WorkShift::create([
                 'day_turn' => 'monday',
-                'start_tun' => '10:00',
+                'start_turn' => '10:00',
                 'end_turn' => '18:00',
                 'helper_id' => $helper->id
             ]);
