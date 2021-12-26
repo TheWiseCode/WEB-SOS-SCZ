@@ -80,7 +80,7 @@ class EmergencyController extends Controller
             ]);
             return $data;
         } catch (Exception $e) {
-            Log::debug($e->getMessage());
+            Log::debug($e->getMessage(), $e->getTrace());
             return $e;
         }
     }
@@ -105,7 +105,7 @@ class EmergencyController extends Controller
             $response = $this->sendEmergency($emergency);
             return response($response, 201);
         } catch (Exception $e) {
-            Log::debug($e->getMessage());
+            Log::debug($e->getMessage(), $e->getTrace());
             return response(['error' => $e->getMessage()], 500);
         }
     }

@@ -65,7 +65,7 @@ class OperatorController extends Controller
                     'user' => $user], 201);
             });
         } catch (Exception $e) {
-            Log::debug($e->getMessage());
+            Log::debug($e->getMessage(), $e->getTrace());
             return response(['message' => 'Error registro no completado'],
                 406);
         }
@@ -122,7 +122,7 @@ class OperatorController extends Controller
             $user->currentAccessToken()->delete();
             return response(['message' => 'Sesion cerrada'], 200);
         } catch (Exception $e) {
-            Log::debug($e->getMessage());
+            Log::debug($e->getMessage(), $e->getTrace());
             return response(['message' => 'Error desconocido'], 406);
         }
     }
@@ -161,7 +161,7 @@ class OperatorController extends Controller
             return response(['message' => 'Emergencia atendida'], 200);
 
         } catch (Exception $e) {
-            Log::debug($e->getMessage());
+            Log::debug($e->getMessage(), $e->getTrace());
             return response(['message' => 'Error desconocido'], 500);
         }
     }
@@ -209,7 +209,7 @@ class OperatorController extends Controller
                 ->where('users.id', $request->user()->id)
                 ->first();
         } catch (Exception $e) {
-            Log::debug($e->getMessage());
+            Log::debug($e->getMessage(), $e->getTrace());
             return response(['message' => 'Error desconocido'], 406);
         }
     }

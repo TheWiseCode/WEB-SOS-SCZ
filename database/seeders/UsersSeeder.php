@@ -6,6 +6,7 @@ use App\Models\Civilian;
 use App\Models\Helper;
 use App\Models\Operator;
 use App\Models\User;
+use App\Models\WorkShift;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -60,6 +61,12 @@ class UsersSeeder extends Seeder
                 'type' => $types[$key],
                 'rank' => $types[$key] == 'police' ? 'sargent': null,
                 //'emergency_unit' => $data['emergency_unit']
+            ]);
+            WorkShift::create([
+                'day_turn' => 'monday',
+                'start_tun' => '10:00',
+                'end_turn' => '18:00',
+                'helper_id' => $helper->id
             ]);
         }
     }
