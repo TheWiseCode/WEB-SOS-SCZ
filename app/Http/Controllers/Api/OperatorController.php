@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Emergency;
+use App\Models\Helper;
 use App\Models\NotificationDevice;
 use App\Models\Operator;
 use App\Models\User;
@@ -131,12 +133,30 @@ class OperatorController extends Controller
         return response(['message' => 'Estado en turno cambiado'], 200);
     }
 
-    public function assignHelperEmergency(Request $request){
+    public function assignHelperEmergency(Request $request)
+    {
         $data = $request->validate([
             'id_emergency' => 'required',
-            'id_helper' =>'required'
+            'id_helper' => 'required'
         ]);
-        return response(['message' => 'algo'], 200);
+        try {
+            $emergency = Emergency::find($data['id_emergency']);
+            if ($emergency && $emergency->state != '1') {
+                return response(['message' => 'Emergencia ya atendida'], 401);
+            }
+            $helper = Helper::find($data['id_helper']);
+            if($helper && !$helper->is_free){
+                return response(['message' => 'Rescatista ya está ocupado'], 402);
+            }
+            $emergency->state = 'progress';
+            $helper->is_free = false;
+            $emergency->save();
+            $helper->save();
+            return response(['message' => 'Emergencia atendida'], 200);
+
+        } catch (Exception $e) {
+            return response(['message' => 'Error desconocido'], 500);
+        }
     }
 
     public function operator(Request $request)
