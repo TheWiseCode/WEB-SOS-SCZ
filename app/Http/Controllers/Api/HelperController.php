@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class HelperController extends Controller
 {
@@ -80,6 +81,7 @@ class HelperController extends Controller
                     'user' => $user], 201);
             });
         } catch (Exception $e) {
+            Log::error($e->getMessage());
             return response(['message' => 'Error registro no completado ' . $e->getMessage()],
                 406);
         }
@@ -138,19 +140,25 @@ class HelperController extends Controller
             $user->currentAccessToken()->delete();
             return response(['message' => 'Sesion cerrada'], 200);
         } catch (Exception $e) {
+            Log::error($e->getMessage());
             return response(['message' => 'Error desconocido'], 406);
         }
     }
 
     public function changeState(Request $request)
     {
-        $data = $request->validate([
-            'in_turn' => 'required'
-        ]);
-        $helper = Helper::where('user_id', $request->user()->id)->first();
-        $helper->in_turn = !$data['in_turn'];
-        $helper->save();
-        return response(['message' => 'Estado en turno cambiado'], 200);
+        try {
+            $data = $request->validate([
+                'in_turn' => 'required'
+            ]);
+            $helper = Helper::where('user_id', $request->user()->id)->first();
+            $helper->in_turn = !$data['in_turn'];
+            $helper->save();
+            return response(['message' => 'Estado en turno cambiado'], 200);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return response(500);
+        }
     }
 
     public function helper(Request $request)
@@ -184,6 +192,7 @@ class HelperController extends Controller
                 'workdays' => $workdays
             ];
         } catch (Exception $e) {
+            Log::error($e->getMessage());
             return response(['message' => 'Error desconocido', 'error' => $e], 406);
         }
     }

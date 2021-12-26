@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class EmergencyController extends Controller
 {
@@ -79,6 +80,7 @@ class EmergencyController extends Controller
             ]);
             return $data;
         } catch (Exception $e) {
+            Log::error($e->getMessage());
             return $e;
         }
     }
@@ -103,6 +105,7 @@ class EmergencyController extends Controller
             $response = $this->sendEmergency($emergency);
             return response($response, 201);
         } catch (Exception $e) {
+            Log::error($e->getMessage());
             return response(['error' => $e->getMessage()], 500);
         }
     }
