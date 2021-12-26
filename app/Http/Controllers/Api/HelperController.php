@@ -193,7 +193,7 @@ class HelperController extends Controller
             ];
         } catch (Exception $e) {
             Log::debug($e->getMessage());
-            return response(['message' => 'Error desconocido', 'error' => $e], 406);
+            return response(['message' => 'Error desconocido', 'error' => $e->getMessage()], 406);
         }
     }
 }
