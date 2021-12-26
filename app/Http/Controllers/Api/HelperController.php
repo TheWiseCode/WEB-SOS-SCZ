@@ -81,7 +81,7 @@ class HelperController extends Controller
                     'user' => $user], 201);
             });
         } catch (Exception $e) {
-            Log::error($e->getMessage());
+            Log::debug($e->getMessage());
             return response(['message' => 'Error registro no completado ' . $e->getMessage()],
                 406);
         }
@@ -140,7 +140,7 @@ class HelperController extends Controller
             $user->currentAccessToken()->delete();
             return response(['message' => 'Sesion cerrada'], 200);
         } catch (Exception $e) {
-            Log::error($e->getMessage());
+            Log::debug($e->getMessage());
             return response(['message' => 'Error desconocido'], 406);
         }
     }
@@ -156,7 +156,7 @@ class HelperController extends Controller
             $helper->save();
             return response(['message' => 'Estado en turno cambiado'], 200);
         } catch (Exception $e) {
-            Log::error($e->getMessage());
+            Log::debug($e->getMessage());
             return response(500);
         }
     }
@@ -192,7 +192,7 @@ class HelperController extends Controller
                 'workdays' => $workdays
             ];
         } catch (Exception $e) {
-            Log::error($e->getMessage());
+            Log::debug($e->getMessage());
             return response(['message' => 'Error desconocido', 'error' => $e], 406);
         }
     }
