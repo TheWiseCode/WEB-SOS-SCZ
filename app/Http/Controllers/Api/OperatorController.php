@@ -141,7 +141,7 @@ class OperatorController extends Controller
         ]);
         try {
             $emergency = Emergency::find($data['id_emergency']);
-            if ($emergency && $emergency->state != '1') {
+            if ($emergency && $emergency->state != 'pending') {
                 return response(['message' => 'Emergencia ya atendida'], 401);
             }
             $helper = Helper::find($data['id_helper']);

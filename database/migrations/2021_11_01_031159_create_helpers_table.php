@@ -15,7 +15,7 @@ class CreateHelpersTable extends Migration
     {
         Schema::create('helpers', function (Blueprint $table) {
             $table->id();
-            $table->string('type')->default('Define it');
+            $table->string('type');
             $table->string('rank')->nullable();
             $table->boolean('in_turn')->default(false);
             $table->boolean('is_free')->default(true);
