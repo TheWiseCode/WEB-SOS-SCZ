@@ -25,9 +25,11 @@ Route::prefix('civilian')->group(function () {
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('', [CivilianController::class, 'civilian']);
         Route::delete('/logout', [CivilianController::class, 'logout']);
-        Route::post('/request-emergency', [EmergencyController::class, 'requestEmergency']);
     });
 });
+
+Route::post('/civilian/request-emergency', [EmergencyController::class, 'requestEmergency']);
+
 
 //TODO: RUTAS API PARA LA APP MOVIL DE PARTE DE LOS OPERADORES: CCO SOS SCZ
 Route::prefix('operator')->group(function () {
@@ -52,16 +54,17 @@ Route::prefix('helper')->group(function () {
         Route::delete('/logout', [HelperController::class, 'logout']);
     });
 });
-//Route::apiResource('/eemergencies', EmergencyController::class);
+
 
 Route::group(['prefix' => 'emergency','middleware' => 'auth:sanctum'], function(){
-    Route::get('by-civil/{id}', [EmergencyController::class,'getEmergenciesByCivil']);
-    Route::get('by-operator/{id}', [EmergencyController::class,'getEmergenciesByOperator']);
-    Route::get('by-helper/{id}', [EmergencyController::class,'getEmergenciesByHelper']);
+    Route::get('/by-operator/{id}', [EmergencyController::class,'getEmergenciesByOperator']);
+    Route::get('/by-civil/{id}', [EmergencyController::class,'getEmergenciesByCivil']);
+    Route::get('/by-helper/{id}', [EmergencyController::class,'getEmergenciesByHelper']);
     Route::get('new-emergencies',[EmergencyController::class,'ViewNewEmergencies']);
     Route::post('store',[EmergencyController::class,'store']);
-    Route::post('accepted-emergency-operator',[EmergencyController::class,'EmergencyAcceptedByOperator']);
-    Route::post('assign-emergency-to-helper',[EmergencyController::class,'EmergencyAssignedToHelper']);
+    Route::post('/accepted-emergency-operator',[EmergencyController::class,'EmergencyAcceptedByOperator']);
+    Route::post('/assign-emergency-to-helper',[EmergencyController::class,'EmergencyAssignedToHelper']);
+
 });
 
 

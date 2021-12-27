@@ -46,9 +46,11 @@ class EmergencyController extends Controller
             'longitude' => $emergency->longitude,
             'latitude' => $emergency->latitude,
         ];
+
         return Http::withHeaders($headers)->post(
             $url . '?=', [
-            'to' => '/topics/in_turn_operators',
+//            'to' => '/topics/in_turn_operators',
+            'to' => 'cGCOW8aPR46Nt9YbIyKEO3:APA91bEfo2cpEz8Qq0sjEJm2B9XHuv_-Zpw1_EOVeQgE3Nd0JjuhdRyYPwCa0U_H0M3saPmtIvsFMdNs_xrfgHXa-V2a_FqN5rYNGPBqcjQKkkzGzidHfrwrppkCVRmktnL2B0oiNi-P',
             'priority' => 'high',
             'notification' => $notification,
             'data' => $data
@@ -62,57 +64,40 @@ class EmergencyController extends Controller
             'description' => 'required',
             'longitude' => 'required',
             'latitude' => 'required',
+            'civilian_id' =>'required'
         ]);
-        $civilian = Civilian::where('user_id', $request->user()->id)->first();
+        $civilian = Civilian::where('user_id', $request->civilian_id)->first();
         $emergency = Emergency::create([
             'type' => $data['type'],
             'description' => $data['description'],
             'longitude' => $data['longitude'],
             'latitude' => $data['latitude'],
-            'civilian_id' => $civilian->id
+            'civilian_id' => $civilian->id,
         ]);
         $response = $this->sendEmergencyToInTurnOperators($emergency);
         return response($response, 201);
     }
 
-    public function getEmergenciesByOperator(Request $request){
-        $data = $request->validate([
-            'operator_id' => 'required'
-        ]);
-        $operator = Operator::find($request->operator_id);
-        if(!$operator){
-            abort(404, 'Some object not found');
-        }
-        $emergency_list =  Emergency::where('operator_id', $request->operator_id)->get();
+    public function getEmergenciesByOperator($operator_id){
+        $operator = Operator::findOrFail($operator_id);
+        $emergency_list =  Emergency::where('operator_id', $operator->id)->get();
         return response($emergency_list, 200);
     }
 
-    public function getEmergenciesByCivil(Request $request){
-        $data = $request->validate([
-            'civilian_id' => 'required'
-        ]);
-        $operator = Civilian::find($request->civilian_id);
-        if(!$operator){
-            abort(404, 'Some object not found');
-        }
-        $emergency_list =  Emergency::where('operator_id', $request->civilian_id)->get();
+    public function getEmergenciesByCivil($civilian_id){
+        $civilian = Civilian::findOrFail($civilian_id);
+        $emergency_list =  Emergency::where('civilian_id', $civilian->id)->get();
         return response($emergency_list, 200);
     }
 
-    public function getEmergenciesByHelper(Request $request){
-        $data = $request->validate([
-            'civilian_id' => 'required'
-        ]);
-        $operator = Helper::find($request->helper_id);
-        if(!$operator){
-            abort(404, 'Some object not found');
-        }
-        $emergency_list =  Emergency::where('helper_id', $request->helper_id)->get();
+    public function getEmergenciesByHelper($helper_id){
+        $helper = Helper::findOrFail($helper_id);
+        $emergency_list =  Emergency::where('helper_id', $helper->id)->get();
         return response($emergency_list, 200);
     }
 
     public function ViewNewEmergencies(){
-        $new_emergencies = Emergency::where('status',1)->get();
+        $new_emergencies = Emergency::where('state',1)->get();
         return response($new_emergencies, 200);
     }
 
@@ -129,16 +114,15 @@ class EmergencyController extends Controller
         ]);
 
         $operator = Operator::where('id', $request->operator_id)->get();
-        $emergency = Emergency::where('id', $request->emergency_id)->get();
+        $emergency = Emergency::where('id', $request->emergency_id)->first();
 
         if(!$operator || !$emergency){
             abort(404, 'Some object not found');
         }
 
-        $emergency->update([
-            'operator_id' => $request->operator_id,
-            'status' => '2' //en curso
-        ]);
+        $emergency->operator_id = $request->operator_id;
+        $emergency->state = '2';
+        $emergency->save();
         return response(200);
     }
 
@@ -155,27 +139,28 @@ class EmergencyController extends Controller
             'emergency_id' => 'required'
         ]);
 
-        $helper = Helper::where('id', $request->helper_id)->get();
-        $emergency = Emergency::where('id', $request->emergency_id)->get();
+        $helper = Helper::where('id', $request->helper_id)->first();
+        $emergency = Emergency::where('id', $request->emergency_id)->first();
         $is_free = $helper->is_free;
 
-        if(!$helper || !$emergency || !$is_free){
+
+        if(!$helper || !$emergency || !$is_free ){
             abort(404, 'Some object not found');
         }
 
-        $emergency->update([
-            'helper_id' => $request->helper_id,
-        ]);
+        $emergency->helper_id = $request->helper_id;
+        $emergency->save();
 
         $helper_userId =  $helper->user_id;
-        $helper_device = NotificationDevice::where('user_id', $helper_userId)->get();
-        return $this->sendNotificationToHelper($helper_device->token, $emergency);
+        $helper_device = NotificationDevice::where('user_id', $helper_userId)->first();
+        $token = $helper_device->token;
+        return $this->sendNotificationToHelper($token, $emergency);
     }
 
     public function sendNotificationToHelper($helper_token,Emergency $emergency){
         $url = 'https://fcm.googleapis.com/fcm/send';
         $headers = [
-            'Authorization' => 'key=' . env('FCM_OPERATOR_API_KEY'),
+            'Authorization' => 'key=' . env('FCM_RESCATISTA_API_KEY'),
             'Content-Type' => 'application/json'
         ];
         $notification = [
