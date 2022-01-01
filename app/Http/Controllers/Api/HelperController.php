@@ -196,4 +196,25 @@ class HelperController extends Controller
             return response(['message' => 'Error desconocido', 'error' => $e->getMessage()], 406);
         }
     }
+
+    public function updateLocation(Request $request)
+    {
+        $data = $request->validate([
+            'longitude' => 'required',
+            'latitude' => 'required'
+        ]);
+        try {
+            $helper = Helper::where('user_id', $request->user()->id)->first();
+            if ($helper) {
+                $helper->latitude = $data['latitude'];
+                $helper->longitude = $data['longitude'];
+                $helper->save();
+                return response(['message' => 'Ubicacion del rescatista actualizada'], 200);
+            }
+            return response(['message' => 'Rescatista no encontrado'], 400);
+        } catch (Exception $e) {
+            Log::debug($e->getMessage(), $e->getTrace());
+            return response(['error' => $e->getMessage()], 500);
+        }
+    }
 }

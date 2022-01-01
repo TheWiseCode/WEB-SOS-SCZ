@@ -48,6 +48,7 @@ Route::prefix('helper')->group(function () {
     Route::post('/login', [HelperController::class, 'login']);
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::post('/update-location', [HelperController::class, 'updateLocation']);
         Route::get('', [HelperController::class, 'helper']);
         Route::post('/change-state', [OperatorController::class, 'changeState']);
         Route::delete('/logout', [HelperController::class, 'logout']);
